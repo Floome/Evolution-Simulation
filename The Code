@@ -1,0 +1,36 @@
+""" # <- everything after a hash is a comment and does not interfere with the code whatsoever. """
+
+
+#necessary stuff
+
+import random
+
+#lists and variables
+
+base_gen = [25,50,25]
+base_calc = []
+desc = 16
+reps = 0
+first_gen = []
+
+#float base_generation, divide each number by the sum of the three numbers and put it into base_calc
+
+for x in base_gen:
+    base_calc.append(float(x)/float(sum(base_gen)))
+
+#generating the base generation
+
+def base_generator(base_calc):
+    x = random.random()                         #generating a random number between 0.0 and 1.0
+    if x <= base_calc[0]:
+        first_gen.append(1)
+    elif x >= (base_calc[0] + base_calc[1]):
+        first_gen.append(2)
+    else:
+        first_gen.append(3)
+         
+
+while reps != desc:
+    base_generator(base_calc)
+    reps += 1
+    
