@@ -5,32 +5,103 @@
 
 import random
 
-#lists and variables
+#lists and variables / modifiable through user
 
 base_gen = [25,50,25]
 base_calc = []
-desc = 16
-reps = 0
-first_gen = []
+numb_gen = 8
+desc_1 = 16
+desc_2 = 4
+reps_1 = 0
+reps_2 = 0
+reps_3 = 0
+gen = []
+temp_gen = []
 
-#float base_generation, divide each number by the sum of the three numbers and put it into base_calc
+#float base_generation, divide each entry in base_gen by the sum of each
+#entries and put result into base_calc
 
 for x in base_gen:
     base_calc.append(float(x)/float(sum(base_gen)))
 
-#generating the base generation
+#generating the base/followup generation ( 16 )
 
-def base_generator(base_calc):
-    x = random.random()                         #generating a random number between 0.0 and 1.0
+def gen_generator(base_calc, gen):
+    x = random.random()
     if x <= base_calc[0]:
-        first_gen.append(1)
+        gen.append(1)
     elif x >= (base_calc[0] + base_calc[1]):
-        first_gen.append(2)
+        gen.append(3)
     else:
-        first_gen.append(3)
+        gen.append(2)
          
 
-while reps != desc:
-    base_generator(base_calc)
-    reps += 1
+while reps_1 != desc_1:
+    gen_generator(base_calc,gen)
+    reps_1 += 1
+
+print gen 
+
+#generating a new generation based upon the old one ( 4 x 2 descendants)
+
+def desc_generator(x,y):
+    if x*y == 1:            # MM * MM -> 4 * MM 
+        for x in range(desc_2):    
+            temp_gen.append(1)
+    elif x*y == 2:          # MM * MN -> 4 * Mx
+        for x in range(desc_2):
+            r = random.randint(1,2)
+            if r == 1:
+                temp_gen.append(1)
+            else:
+                temp_gen.append(2)
+    elif x*y == 3:          # MM * NN -> 4 * MN
+        for x in range(desc_2):    
+            temp_gen.append(2)
+    elif x*y == 4:          # MN * MN -> 4 * XX
+        for x in range(desc_2):
+            r = random.randint(1,4)
+            if r == 1:
+                temp_gen.append(1)
+            elif r == 2:
+                temp_gen.append(3)
+            else:
+                temp_gen.append(2)
+    elif x*y == 6:          # NN * MN -> 4 * NX
+        for x in range(desc_2):
+            r = random.randint(1,2)
+            if r == 1:
+                temp_gen.append(2)
+            else:
+                temp_gen.append(3)
+    else:                   # NN * NN -> 4 * NN
+        for x in range(desc_2):    
+            temp_gen.append(3)
+
+
+def main_generator (reps_2,desc_2):
+    del temp_gen[:]
+    while reps_2 != desc_2:
+        a = random.randint(0,(len(gen)-1))
+        x = gen[a]
+        del gen[a]
+        b = random.randint(0,(len(gen)-1))
+        y = gen[b]
+        del gen[b]
+        print x
+        print y
+        desc_generator(x,y)
+        reps_2 += 1
+        print 
+        print temp_gen
+        print 
     
+    del gen[:]
+    gen[:] = temp_gen
+    
+
+
+while reps_3 != numb_gen:
+    main_generator(reps_2,desc_2)
+    print gen
+    reps_3 += 1
